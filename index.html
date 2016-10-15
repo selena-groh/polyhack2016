@@ -28,7 +28,7 @@
       <input id="gasLevel" type="textbox">
       Miles Per Gallon:
       <input id="mpg" type="textbox">
-      <input id="submit" type="button" value="Geocode"> <br><br><br>
+      <input id="submit" type="button" value="Submit"> <br><br><br>
     </div>
 
     <div id="map"></div>
@@ -44,6 +44,10 @@
         document.getElementById('submit').addEventListener('click', function() {
           geocodeAddress(geocoder, map);
         });
+        document.getElementById('submit').addEventListener('click', function() {
+          console.log(getGasLevel());
+          console.log(getMPG());
+        });
       }
 
       function geocodeAddress(geocoder, resultsMap) {
@@ -56,9 +60,17 @@
               position: results[0].geometry.location
             });
           } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+            alert('Geocode was not successful: ' + status);
           }
         });
+      }
+
+      function getGasLevel() {
+        return document.getElementById('gasLevel').value;
+      }
+
+      function getMPG() {
+          return document.getElementById('mpg').value;
       }
     </script>
 
