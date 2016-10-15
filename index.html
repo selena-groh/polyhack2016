@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
-	  </script>
-	  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAudkbvAvzoIjZx2D_1K4YDPgfi-Ii2E2s&callback=initMap"
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"> </script>
+      <script      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAudkbvAvzoIjZx2D_1K4YDPgfi-Ii2E2s&callback=initMap"
 	  async defer>
 	  </script>
 	  <style>
       html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+          height: 100%;
+          margin: 0;
+          padding: 0;
       }
       #map {
-        height: 50%;
+          width: 100%;
+          height: 50%;
       }
-    </style>
+      </style>
   </head>
+
   <body>
-    <h1> HELLO WORLD!!! </h1>
-	<div id="map"></div>
+    <h1> WAYSOURCE </h1>
+
+    <div id="floating-panel">
+      Current Location:
+      <input id="address" type="textbox">
+      Gas Level:
+      <input id="gasLevel" type="textbox">
+      Miles Per Gallon:
+      <input id="mpg" type="textbox">
+      <input id="submit" type="button" value="Geocode"> <br><br><br>
+    </div>
+
+    <div id="map"></div>
+
     <script>
       function initMap() {
-        // Create a map object and specify the DOM element for display.
-		var bostonAve = {lat: 42.403521, lng: -71.114063};
-		var map = new google.maps.Map(document.getElementById('map'), {
-          center: bostonAve,
-          scrollwheel: true,
-          zoom: 17
-	    });
-		var marker = new google.maps.Marker({
-			position: bostonAve,
-			map: map
-		});
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 17,
+          center: {lat: 42.403521, lng: -71.114063}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
       }
     </script>
+
   </body>
-</html>
+ </html>
